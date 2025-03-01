@@ -12,16 +12,14 @@ import web.service.UserServiceImpl;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
+    private UserServiceImpl userService;
+
 
     @GetMapping()
     public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.findAll());
         return "user/all_users";
     }
 
@@ -33,13 +31,13 @@ public class UserController {
 
     @PostMapping()
     public String addUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user.getFirstName(), user.getLastName(), user.getEmail());
+        userService.save(user);
         return "redirect:/user";
     }
 
     @GetMapping("/show")
     public String showUserById(@RequestParam("id") int id, Model model) {
-        User user = userService.showUserById(id);
+        User user = userService.findById(id);
         if (user == null) {
             return "redirect:/user";
         } else {
@@ -50,19 +48,19 @@ public class UserController {
 
     @GetMapping("/show/edit")
     public String editUser(Model model, @RequestParam("id") int id) {
-        model.addAttribute("user", userService.showUserById(id));
+        model.addAttribute("user", userService.findById(id));
         return "user/edit_user";
     }
 
     @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User user, @RequestParam("id") int id) {
-        userService.updateUserById(id, user);
+        userService.update(id, user);
         return "redirect:/user";
     }
 
     @PostMapping("/show/delete")
     public String deleteUser(@ModelAttribute("user") User user, @RequestParam("id") int id) {
-        userService.removeUserById(id);
+        userService.delete(id);
         return "redirect:/user";
     }
 }

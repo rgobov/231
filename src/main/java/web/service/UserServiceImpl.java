@@ -2,39 +2,42 @@ package web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import web.dao.UserDao;
-import web.dao.UserDaoImpl;
+import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
+import web.repositories.PeopleRepo;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+@Transactional(readOnly = true)
+public class UserServiceImpl implements UserService  {
+
+    private final PeopleRepo peopleRepo;
+
     @Autowired
-    private UserDao userDao;
-
-    @Override
-    public void saveUser(String firstName, String lastName, String email) {
-        userDao.saveUser(firstName, lastName, email);
+    public UserServiceImpl(PeopleRepo peopleRepo) {
+        this.peopleRepo = peopleRepo;
     }
 
-    @Override
-    public User showUserById(int id) {
-        return userDao.showUserById(id);
+    public List<User> findAll() {
+        return peopleRepo.findAll();
     }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+    public User findById(int id) {
+        Optional<User> user = peopleRepo.findById(id);
+        return user.orElse(null);
     }
-
-    @Override
-    public void updateUserById(int id, User updatedUser) {
-        userDao.updateUserById(id, updatedUser);
+    @Transactional
+    public void save(User user) {
+        peopleRepo.save(user);
     }
-
-    @Override
-    public void removeUserById(int id) {
-        userDao.removeUserById(id);
+    @Transactional
+    public void update( int id, User updateuser) {
+        updateuser.setId(id);
+        peopleRepo.save(updateuser);
+    }
+    @Transactional
+    public void delete(int id) {
+        peopleRepo.deleteById(id);
     }
 }
