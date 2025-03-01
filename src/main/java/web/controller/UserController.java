@@ -10,7 +10,7 @@ import web.service.UserService;
 import web.service.UserServiceImpl;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/")
 public class UserController {
 
     @Autowired
