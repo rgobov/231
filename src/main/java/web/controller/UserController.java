@@ -14,7 +14,7 @@ import web.service.UserServiceImpl;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
 
     @GetMapping()
