@@ -14,6 +14,10 @@ import web.service.UserServiceImpl;
 public class UserController {
 
     @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     private UserService userService;
 
 

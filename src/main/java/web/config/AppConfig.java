@@ -22,7 +22,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @PropertySources({
         @PropertySource("classpath:db.properties"),
-        @PropertySource("classpath:hibernate.properties")
 })
 @EnableTransactionManagement
 @ComponentScan(value = "web")
@@ -57,16 +56,10 @@ public class AppConfig {
         return dataSource;
     }
 
-//    @Bean
-//    public PlatformTransactionManager getTransactionManager() {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-//        return transactionManager;
-//    }
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-        return new JpaTransactionManager( entityManagerFactory);
+        return new JpaTransactionManager(entityManagerFactory);
     }
 
     public Properties getHibernateProperties() {
